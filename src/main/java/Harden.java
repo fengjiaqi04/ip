@@ -9,7 +9,6 @@ public class Harden {
         int taskCount = 0;
 
 
-
         System.out.println("Hello! I'm Harden");
         System.out.println("What can I do for you?");
 
@@ -23,7 +22,7 @@ public class Harden {
             } else if (input.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + "." + tasks[i]);
+                    System.out.println((i + 1) + ". " + tasks[i]);
                 }
 
             } else if (input.startsWith("mark ")) {
@@ -42,14 +41,64 @@ public class Harden {
                 tasks[taskNumber - 1].markNotDone();
 //for printing no need to use tasks[n].toString() cuz println(Object) is effectively println(Object.toString())
                 System.out.println(tasks[taskNumber - 1]);
+            } else {
+                // ---- ADD TASKS (Level 4) ----
+                if (input.startsWith("todo ")) {
+                    String description = input.substring("todo ".length()).trim();
+
+                    tasks[taskCount] = new ToDo(description);
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount]);
+                    System.out.println("Now you have " + (taskCount + 1) + " tasks in the list.");
+
+                    taskCount++;
+
+                } else if (input.startsWith("deadline ")) {
+                    String rest = input.substring("deadline ".length()).trim(); // "return book /by Sunday"
+
+                    int byIndex = rest.indexOf("/by");
+                    String description = rest.substring(0, byIndex).trim();
+                    String by = rest.substring(byIndex + 3).trim(); // after "/by"
+
+                    tasks[taskCount] = new Deadline(description, by);
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount]);
+                    System.out.println("Now you have " + (taskCount + 1) + " tasks in the list.");
+
+                    taskCount++;
+
+                } else if (input.startsWith("event ")) {
+                    String rest = input.substring("event ".length()).trim(); // "project meeting /from Mon 2pm /to 4pm"
+
+                    int fromIndex = rest.indexOf("/from");
+                    int toIndex = rest.indexOf("/to");
+
+                    String description = rest.substring(0, fromIndex).trim();
+                    String from = rest.substring(fromIndex + 5, toIndex).trim(); // after "/from" (length 5)
+                    String to = rest.substring(toIndex + 3).trim();              // after "/to" (length 3)
+
+                    tasks[taskCount] = new Event(description, from, to);
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount]);
+                    System.out.println("Now you have " + (taskCount + 1) + " tasks in the list.");
+
+                    taskCount++;
+
+                } else {
+                    // fallback: treat as todo OR you can print an error message later
+                    tasks[taskCount] = new ToDo(input);
+
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount]);
+                    System.out.println("Now you have " + (taskCount + 1) + " tasks in the list.");
+
+                    taskCount++;
+                }
             }
 
-
-            else {
-                tasks[taskCount] = new Task(input);
-                taskCount++;
-                System.out.println("added: " + input);
-            }
         }
     }
 }
