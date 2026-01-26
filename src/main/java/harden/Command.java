@@ -1,3 +1,5 @@
+package harden;
+
 public abstract class Command {
     /**
      * Executes the command.

@@ -1,3 +1,5 @@
+package harden;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,11 +12,11 @@ public class Harden {
     public Harden() {
         ui = new Ui();
 
-        // Your Storage expects a file path
+        // Your harden.Storage expects a file path
         storage = new Storage("./data/harden.txt");
 
         try {
-            // Your Storage.load() returns Task[]
+            // Your harden.Storage.load() returns harden.Task[]
             Task[] loaded = storage.load();
 
             ArrayList<Task> list = new ArrayList<>();

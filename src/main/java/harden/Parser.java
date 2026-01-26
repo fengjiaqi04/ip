@@ -1,3 +1,5 @@
+package harden;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -33,7 +35,7 @@ public class Parser {
     }
 
     /**
-     * Loads one line from harden.txt into a Task.
+     * Loads one line from harden.txt into a harden.Task.
      * Supports BOTH older (date-only) and newer (date+time) formats.
      */
     public static Task deserialize(String line) throws HardenException {
@@ -135,7 +137,7 @@ public class Parser {
             }
 
             if ("1".equals(doneFlag)) {
-                task.markDone(); // ✅ matches your Task.java
+                task.markDone(); // ✅ matches your harden.Task.java
             }
 
             return task;
