@@ -4,12 +4,12 @@ public class ToDo extends Task {
     }
 
     @Override
-    public String toString() {
-        return "[T]" + super.toString();
+    public String serialize() {
+        return "T | " + (isDone ? 1 : 0) + " | " + description;
     }
 
     @Override
-    public String serialize() {
-        return "T | " + (isDone ? "1" : "0") + " | " + description;
+    public String toString() {
+        return "[T]" + super.toString();
     }
 }

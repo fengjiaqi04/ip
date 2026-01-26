@@ -1,5 +1,5 @@
 public abstract class Task {
-    protected String description;
+    protected final String description;
     protected boolean isDone;
 
     public Task(String description) {
@@ -8,22 +8,21 @@ public abstract class Task {
     }
 
     public void markDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
     public void markNotDone() {
-        this.isDone = false;
+        isDone = false;
     }
 
     protected String statusIcon() {
         return isDone ? "X" : " ";
     }
 
+    public abstract String serialize();
+
     @Override
     public String toString() {
         return "[" + statusIcon() + "] " + description;
     }
-
-    // For Level 7 saving
-    public abstract String serialize();
 }
