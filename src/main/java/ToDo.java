@@ -1,10 +1,15 @@
-public class ToDo extends Task{
+public class ToDo extends Task {
     public ToDo(String description) {
         super(description);
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "[T]" + super.toString();
+    }
+
+    @Override
+    public String serialize() {
+        return "T | " + (isDone ? "1" : "0") + " | " + description;
     }
 }

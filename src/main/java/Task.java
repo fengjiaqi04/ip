@@ -1,6 +1,6 @@
-public class Task {
-    private String description;
-    private boolean isDone;
+public abstract class Task {
+    protected String description;
+    protected boolean isDone;
 
     public Task(String description) {
         this.description = description;
@@ -8,15 +8,22 @@ public class Task {
     }
 
     public void markDone() {
-        isDone = true;
+        this.isDone = true;
     }
 
     public void markNotDone() {
-        isDone = false;
+        this.isDone = false;
     }
 
-    public String toString() {
-        String status = isDone ? "X" : " ";
-        return "[" + status + "] " + description;
+    protected String statusIcon() {
+        return isDone ? "X" : " ";
     }
+
+    @Override
+    public String toString() {
+        return "[" + statusIcon() + "] " + description;
+    }
+
+    // For Level 7 saving
+    public abstract String serialize();
 }
