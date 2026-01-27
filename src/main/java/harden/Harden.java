@@ -11,12 +11,9 @@ public class Harden {
 
     public Harden() {
         ui = new Ui();
-
-        // Your harden.Storage expects a file path
-        storage = new Storage("./data/harden.txt");
+        storage = new Storage("data/harden.txt");
 
         try {
-            // Your harden.Storage.load() returns harden.Task[]
             Task[] loaded = storage.load();
 
             ArrayList<Task> list = new ArrayList<>();
@@ -42,6 +39,12 @@ public class Harden {
 
         while (true) {
             try {
+                // ✅ prevents NoSuchElementException (EOF) when running via Gradle
+                if (!scanner.hasNextLine()) {
+                    ui.showGoodbye();
+                    break;
+                }
+
                 String input = scanner.nextLine();
                 Command command = Parser.parse(input);
                 command.execute(tasks, ui, storage);
