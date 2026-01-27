@@ -17,7 +17,7 @@ public class FindCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         ArrayList<Task> matches = new ArrayList<>();
 
-        // ✅ use the internal list instead of tasks.get(i)
+        //  use the internal list instead of tasks.get(i)
         for (Task task : tasks.getTasks()) {
             if (task != null && task.getDescription().contains(keyword)) {
                 matches.add(task);

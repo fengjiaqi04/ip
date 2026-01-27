@@ -9,6 +9,10 @@ public class TaskList {
 
     private final ArrayList<Task> tasks;
 
+    public Task get(int index) {
+        return tasks.get(index);
+    }
+
     /** Constructs an empty task list. */
     public TaskList() {
         tasks = new ArrayList<>();
