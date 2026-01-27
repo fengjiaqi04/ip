@@ -3,19 +3,26 @@ package harden;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Main entry point of the Harden chatbot application.
+ * Responsible for initializing components and running the main interaction loop.
+ */
 public class Harden {
 
-    private Storage storage;
+    private final Storage storage;
     private TaskList tasks;
-    private Ui ui;
+    private final Ui ui;
 
+    /**
+     * Constructs the Harden chatbot.
+     * Initializes UI, storage, and loads tasks from disk if available.
+     */
     public Harden() {
         ui = new Ui();
         storage = new Storage("data/harden.txt");
 
         try {
             Task[] loaded = storage.load();
-
             ArrayList<Task> list = new ArrayList<>();
             if (loaded != null) {
                 for (Task t : loaded) {
@@ -24,22 +31,23 @@ public class Harden {
                     }
                 }
             }
-
             tasks = new TaskList(list);
-
         } catch (HardenException e) {
             ui.showError(e.getMessage());
             tasks = new TaskList();
         }
     }
 
+    /**
+     * Runs the main program loop, reading user input and executing commands
+     * until an exit command is encountered.
+     */
     public void run() {
         ui.showWelcome();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
             try {
-                // ✅ prevents NoSuchElementException (EOF) when running via Gradle
                 if (!scanner.hasNextLine()) {
                     ui.showGoodbye();
                     break;
@@ -59,6 +67,11 @@ public class Harden {
         }
     }
 
+    /**
+     * Program entry point.
+     *
+     * @param args Command-line arguments (unused).
+     */
     public static void main(String[] args) {
         new Harden().run();
     }

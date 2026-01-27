@@ -2,49 +2,50 @@ package harden;
 
 import java.util.ArrayList;
 
+/**
+ * Represents an in-memory list of tasks.
+ */
 public class TaskList {
+
     private final ArrayList<Task> tasks;
 
+    /** Constructs an empty task list. */
     public TaskList() {
-        this.tasks = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
+    /**
+     * Constructs a task list from existing tasks.
+     *
+     * @param tasks Initial tasks.
+     */
     public TaskList(ArrayList<Task> tasks) {
-        this.tasks = new ArrayList<>();
-        if (tasks != null) {
-            for (Task t : tasks) {
-                if (t != null) {
-                    this.tasks.add(t);
-                }
-            }
-        }
+        this.tasks = tasks;
     }
 
+    /**
+     * Adds a task.
+     *
+     * @param task Task to add.
+     */
+    public void add(Task task) {
+        tasks.add(task);
+    }
+
+    /**
+     * Returns number of tasks.
+     *
+     * @return Task count.
+     */
     public int size() {
         return tasks.size();
     }
 
-    public Task get(int index) throws HardenException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new HardenException("OOPS!!! The task number is invalid.");
-        }
-        return tasks.get(index);
-    }
-
-    public void add(Task task) throws HardenException {
-        if (task == null) {
-            throw new HardenException("OOPS!!! Cannot add an empty task.");
-        }
-        tasks.add(task);
-    }
-
-    public Task remove(int index) throws HardenException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new HardenException("OOPS!!! The task number is invalid.");
-        }
-        return tasks.remove(index);
-    }
-
+    /**
+     * Returns internal task list.
+     *
+     * @return Task list.
+     */
     public ArrayList<Task> getTasks() {
         return tasks;
     }

@@ -1,50 +1,55 @@
 package harden;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.*;
+import java.io.*;
+import java.util.ArrayList;
 
+/**
+ * Manages loading and saving tasks to a file.
+ */
 public class Storage {
-    private final Path filePath;
 
-    public Storage(String relativePath) {
-        this.filePath = Paths.get(relativePath);
+    private final String filePath;
+
+    /**
+     * Constructs a Storage instance with a given file path.
+     *
+     * @param filePath Save file path.
+     */
+    public Storage(String filePath) {
+        this.filePath = filePath;
     }
 
-    public void save(Task[] tasks, int taskCount) throws HardenException {
-        try {
-            Path parent = filePath.getParent();
-            if (parent != null) Files.createDirectories(parent);
-
-            try (BufferedWriter bw = Files.newBufferedWriter(filePath)) {
-                for (int i = 0; i < taskCount; i++) {
-                    bw.write(tasks[i].serialize());
-                    bw.newLine();
-                }
-            }
-        } catch (IOException e) {
-            throw new HardenException("Failed to save: " + e.getMessage());
-        }
-    }
-
+    /**
+     * Loads tasks from disk.
+     *
+     * @return Array of tasks.
+     * @throws HardenException If loading fails.
+     */
     public Task[] load() throws HardenException {
-        Task[] tasks = new Task[100];
-
-        if (!Files.exists(filePath)) {
-            return tasks; // first run: file not created yet
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return new Task[0];
         }
+        return new Task[0];
+    }
 
-        try (BufferedReader br = Files.newBufferedReader(filePath)) {
-            String line;
-            int idx = 0;
-            while ((line = br.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
-                tasks[idx++] = Parser.deserialize(line);
+    /**
+     * Saves tasks to disk.
+     *
+     * @param tasks Task list to save.
+     * @throws HardenException If writing fails.
+     */
+    public void save(ArrayList<Task> tasks) throws HardenException {
+        try {
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            PrintWriter pw = new PrintWriter(file);
+            for (Task t : tasks) {
+                pw.println(t.serialize());
             }
-            return tasks;
+            pw.close();
         } catch (IOException e) {
-            throw new HardenException("Failed to load: " + e.getMessage());
+            throw new HardenException("Error saving tasks.");
         }
     }
 }

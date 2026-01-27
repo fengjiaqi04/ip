@@ -1,12 +1,12 @@
 package harden;
 
+/**
+ * Command that exits the application.
+ */
 public class ByeCommand extends Command {
 
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
-        // Goodbye message is handled in harden.Harden.java after execute()
-        // so we keep this empty.
-    }
+    public void execute(TaskList tasks, Ui ui, Storage storage) { }
 
     @Override
     public boolean isExit() {
