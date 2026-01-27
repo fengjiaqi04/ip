@@ -20,17 +20,17 @@ public class Parser {
         String rest = (parts.length < 2) ? "" : parts[1];
 
         switch (commandWord) {
-            case "bye":
-                return new ByeCommand();
-            case "list":
-                return new ListCommand();
-            case "todo":
-                if (rest.trim().isEmpty()) {
-                    throw new HardenException("OOPS!!! The description of a todo cannot be empty.");
-                }
-                return new TodoCommand(rest);
-            default:
-                throw new HardenException("OOPS!!! This command is not refactored yet: " + commandWord);
+        case "bye":
+            return new ByeCommand();
+        case "list":
+            return new ListCommand();
+        case "todo":
+            if (rest.trim().isEmpty()) {
+                throw new HardenException("OOPS!!! The description of a todo cannot be empty.");
+            }
+            return new TodoCommand(rest);
+        default:
+            throw new HardenException("OOPS!!! This command is not refactored yet: " + commandWord);
         }
     }
 
@@ -56,84 +56,84 @@ public class Parser {
             Task task;
 
             switch (type) {
-                case "T":
-                    task = new ToDo(desc);
-                    break;
+            case "T":
+                task = new ToDo(desc);
+                break;
 
-                case "D":
-                    // Possible:
-                    // D | done | desc | yyyy-MM-dd
-                    // D | done | desc | yyyy-MM-dd | HHmm
-                    // D | done | desc | HHmm | yyyy-MM-dd
-                    if (parts.length < 4) {
-                        throw new HardenException("Corrupted save file (deadline): " + line);
-                    }
+            case "D":
+                // Possible:
+                // D | done | desc | yyyy-MM-dd
+                // D | done | desc | yyyy-MM-dd | HHmm
+                // D | done | desc | HHmm | yyyy-MM-dd
+                if (parts.length < 4) {
+                    throw new HardenException("Corrupted save file (deadline): " + line);
+                }
 
-                    LocalDate byDate;
-                    LocalTime byTime = LocalTime.MIDNIGHT;
+                LocalDate byDate;
+                LocalTime byTime = LocalTime.MIDNIGHT;
 
-                    if (parts.length == 4) {
-                        // date-only
-                        byDate = parseDate(parts[3]);
+                if (parts.length == 4) {
+                    // date-only
+                    byDate = parseDate(parts[3]);
+                } else {
+                    String a = parts[3].trim();
+                    String b = parts[4].trim();
+
+                    if (looksLikeDate(a) && looksLikeTime(b)) {
+                        byDate = parseDate(a);
+                        byTime = parseTime(b);
+                    } else if (looksLikeTime(a) && looksLikeDate(b)) {
+                        byTime = parseTime(a);
+                        byDate = parseDate(b);
+                    } else if (looksLikeDate(a)) {
+                        // fallback: treat a as date, ignore b
+                        byDate = parseDate(a);
                     } else {
-                        String a = parts[3].trim();
-                        String b = parts[4].trim();
-
-                        if (looksLikeDate(a) && looksLikeTime(b)) {
-                            byDate = parseDate(a);
-                            byTime = parseTime(b);
-                        } else if (looksLikeTime(a) && looksLikeDate(b)) {
-                            byTime = parseTime(a);
-                            byDate = parseDate(b);
-                        } else if (looksLikeDate(a)) {
-                            // fallback: treat a as date, ignore b
-                            byDate = parseDate(a);
-                        } else {
-                            throw new HardenException("Corrupted save file (deadline datetime): " + line);
-                        }
+                        throw new HardenException("Corrupted save file (deadline datetime): " + line);
                     }
+                }
 
-                    task = new Deadline(desc, byDate, byTime);
-                    break;
+                task = new Deadline(desc, byDate, byTime);
+                break;
 
-                case "E":
-                    // Possible:
-                    // E | done | desc | fromDate | toDate
-                    // E | done | desc | fromDate | fromTime | toDate | toTime
-                    // (and sometimes time/date swapped per pair)
-                    if (parts.length < 5) {
-                        throw new HardenException("Corrupted save file (event): " + line);
-                    }
+            case "E":
+                // Possible:
+                // E | done | desc | fromDate | toDate
+                // E | done | desc | fromDate | fromTime | toDate | toTime
+                // (and sometimes time/date swapped per pair)
+                if (parts.length < 5) {
+                    throw new HardenException("Corrupted save file (event): " + line);
+                }
 
-                    LocalDate fromDate;
-                    LocalTime fromTime = LocalTime.MIDNIGHT;
-                    LocalDate toDate;
-                    LocalTime toTime = LocalTime.MIDNIGHT;
+                LocalDate fromDate;
+                LocalTime fromTime = LocalTime.MIDNIGHT;
+                LocalDate toDate;
+                LocalTime toTime = LocalTime.MIDNIGHT;
 
-                    if (parts.length == 5) {
-                        // date-only
-                        fromDate = parseDate(parts[3]);
-                        toDate = parseDate(parts[4]);
-                    } else if (parts.length >= 7) {
-                        // date+time pairs (allow swapped within each pair)
-                        // pair1: parts[3], parts[4]
-                        // pair2: parts[5], parts[6]
-                        LocalDateTimePair p1 = parseDateTimePair(parts[3], parts[4]);
-                        LocalDateTimePair p2 = parseDateTimePair(parts[5], parts[6]);
+                if (parts.length == 5) {
+                    // date-only
+                    fromDate = parseDate(parts[3]);
+                    toDate = parseDate(parts[4]);
+                } else if (parts.length >= 7) {
+                    // date+time pairs (allow swapped within each pair)
+                    // pair1: parts[3], parts[4]
+                    // pair2: parts[5], parts[6]
+                    LocalDateTimePair p1 = parseDateTimePair(parts[3], parts[4]);
+                    LocalDateTimePair p2 = parseDateTimePair(parts[5], parts[6]);
 
-                        fromDate = p1.date;
-                        fromTime = p1.time;
-                        toDate = p2.date;
-                        toTime = p2.time;
-                    } else {
-                        throw new HardenException("Corrupted save file (event datetime): " + line);
-                    }
+                    fromDate = p1.date;
+                    fromTime = p1.time;
+                    toDate = p2.date;
+                    toTime = p2.time;
+                } else {
+                    throw new HardenException("Corrupted save file (event datetime): " + line);
+                }
 
-                    task = new Event(desc, fromDate, fromTime, toDate, toTime);
-                    break;
+                task = new Event(desc, fromDate, fromTime, toDate, toTime);
+                break;
 
-                default:
-                    throw new HardenException("Corrupted save file (unknown task type): " + type);
+            default:
+                throw new HardenException("Corrupted save file (unknown task type): " + type);
             }
 
             if ("1".equals(doneFlag)) {

@@ -20,7 +20,6 @@ public class TodoCommand extends Command {
         storage.save(tasks.getTasks().toArray(new Task[0]), tasks.size());
 
 
-
         ui.showLine();
         ui.showMessage("Got it. I've added this task:");
         ui.showMessage("  " + task);
