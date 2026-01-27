@@ -5,17 +5,19 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents a task that must be completed by a specific date and time.
+ * Represents a deadline task with a due date and time.
  */
 public class Deadline extends Task {
+    private static final DateTimeFormatter DATE_OUT = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter TIME_OUT = DateTimeFormatter.ofPattern("HHmm");
 
     private final LocalDate byDate;
     private final LocalTime byTime;
 
     /**
-     * Constructs a deadline task.
+     * Creates a new deadline task (not done by default).
      *
-     * @param description Task description.
+     * @param description Description of the deadline task.
      * @param byDate Due date.
      * @param byTime Due time.
      */
@@ -26,34 +28,31 @@ public class Deadline extends Task {
     }
 
     /**
-     * Formats the deadline date/time for display.
+     * Creates a new deadline task with explicit done status.
      *
-     * @return A formatted due date/time string.
+     * @param description Description of the deadline task.
+     * @param isDone Done status.
+     * @param byDate Due date.
+     * @param byTime Due time.
      */
-    private String formatBy() {
-        // Example output: Dec 03 2019 6:00pm
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mma");
-        return byDate.format(dateFmt) + " " + byTime.format(timeFmt).toLowerCase();
+    public Deadline(String description, boolean isDone, LocalDate byDate, LocalTime byTime) {
+        super(description, isDone);
+        this.byDate = byDate;
+        this.byTime = byTime;
     }
 
-    /**
-     * Returns the save-file representation of this deadline.
-     *
-     * @return Serialized form for storage.
-     */
+    private String formatBy() {
+        // You can change this display format if your course requires something else.
+        return byDate + " " + byTime;
+    }
+
     @Override
     public String serialize() {
-        // Use ISO format so parsing is easy: 2019-12-03 and 18:00
-        return "D | " + (isDone ? "1" : "0") + " | " + description
-                + " | " + byDate + " | " + byTime;
+        // Format: D | 0/1 | desc | yyyy-MM-dd | HHmm
+        return "D | " + (isDone ? "1" : "0") + " | " + description + " | "
+                + byDate.format(DATE_OUT) + " | " + byTime.format(TIME_OUT);
     }
 
-    /**
-     * Returns the display string for this deadline.
-     *
-     * @return User-facing task string.
-     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + formatBy() + ")";

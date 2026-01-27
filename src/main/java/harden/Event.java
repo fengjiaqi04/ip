@@ -5,9 +5,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Represents an event task spanning a start and end date/time.
+ * Represents an event task with a start (from) date/time and end (to) date/time.
  */
 public class Event extends Task {
+    private static final DateTimeFormatter DATE_OUT = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter TIME_OUT = DateTimeFormatter.ofPattern("HHmm");
 
     private final LocalDate fromDate;
     private final LocalTime fromTime;
@@ -15,16 +17,15 @@ public class Event extends Task {
     private final LocalTime toTime;
 
     /**
-     * Constructs an event task.
+     * Creates a new event task (not done by default).
      *
-     * @param description Event description.
+     * @param description Description of the event.
      * @param fromDate Start date.
      * @param fromTime Start time.
      * @param toDate End date.
      * @param toTime End time.
      */
-    public Event(String description, LocalDate fromDate, LocalTime fromTime,
-                 LocalDate toDate, LocalTime toTime) {
+    public Event(String description, LocalDate fromDate, LocalTime fromTime, LocalDate toDate, LocalTime toTime) {
         super(description);
         this.fromDate = fromDate;
         this.fromTime = fromTime;
@@ -33,49 +34,39 @@ public class Event extends Task {
     }
 
     /**
-     * Formats the start date/time for display.
+     * Creates a new event task with explicit done status.
      *
-     * @return Formatted start date/time string.
+     * @param description Description of the event.
+     * @param isDone Done status.
+     * @param fromDate Start date.
+     * @param fromTime Start time.
+     * @param toDate End date.
+     * @param toTime End time.
      */
-    private String formatFrom() {
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mma");
-        return fromDate.format(dateFmt) + " " + fromTime.format(timeFmt).toLowerCase();
+    public Event(String description, boolean isDone,
+                 LocalDate fromDate, LocalTime fromTime,
+                 LocalDate toDate, LocalTime toTime) {
+        super(description, isDone);
+        this.fromDate = fromDate;
+        this.fromTime = fromTime;
+        this.toDate = toDate;
+        this.toTime = toTime;
     }
 
-    /**
-     * Formats the end date/time for display.
-     *
-     * @return Formatted end date/time string.
-     */
-    private String formatTo() {
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mma");
-        return toDate.format(dateFmt) + " " + toTime.format(timeFmt).toLowerCase();
+    private String formatRange() {
+        return fromDate + " " + fromTime + " to " + toDate + " " + toTime;
     }
 
-    /**
-     * Returns the save-file representation of this event.
-     *
-     * @return Serialized form for storage.
-     */
     @Override
     public String serialize() {
-        // ISO formats for easy parsing later
-        return "E | " + (isDone ? "1" : "0") + " | " + description
-                + " | " + fromDate + " | " + fromTime
-                + " | " + toDate + " | " + toTime;
+        // Format: E | 0/1 | desc | yyyy-MM-dd | HHmm | yyyy-MM-dd | HHmm
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
+                + fromDate.format(DATE_OUT) + " | " + fromTime.format(TIME_OUT) + " | "
+                + toDate.format(DATE_OUT) + " | " + toTime.format(TIME_OUT);
     }
 
-    /**
-     * Returns the display string for this event.
-     *
-     * @return User-facing task string.
-     */
     @Override
     public String toString() {
-        return "[E]" + super.toString()
-                + " (from: " + formatFrom()
-                + " to: " + formatTo() + ")";
+        return "[E]" + super.toString() + " (from: " + formatRange() + ")";
     }
 }

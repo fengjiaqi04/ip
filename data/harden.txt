@@ -1,10 +1,6 @@
-T | 0 | borrow book
-D | 0 | return book | 2019-12-02 | 0000
-D | 0 | submit report | 2019-12-03 | 1800
-E | 0 | project meeting | 2019-12-06 | 1400 | 2019-12-06 | 1600
-T | 0 | borrow book
-D | 0 | return book | 2019-12-02 | 0000
-D | 0 | submit report | 2019-12-03 | 1800
-E | 0 | project meeting | 2019-12-06 | 1400 | 2019-12-06 | 1600
 T | 0 | read book
 T | 0 | read book
+T | 0 | read book
+T | 0 | return book
+D | 0 | pay bills | 2026-02-01 | 1800
+E | 1 | project meeting | 2026-02-03 | 1400 | 2026-02-03 | 1600

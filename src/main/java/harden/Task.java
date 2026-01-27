@@ -1,17 +1,15 @@
 package harden;
 
 /**
- * Represents a generic task with a description and a completion status.
- * Specific task types (e.g., todo, deadline, event) extend this class.
+ * Represents a task item with a description and completion status.
+ * Subclasses define any additional fields (e.g., dates/times) and how to serialize.
  */
 public abstract class Task {
-
     protected final String description;
     protected boolean isDone;
 
     /**
-     * Constructs a task with the given description.
-     * Tasks are initialized as not done.
+     * Creates a task with the given description. Task starts as not done.
      *
      * @param description Task description.
      */
@@ -20,40 +18,63 @@ public abstract class Task {
         this.isDone = false;
     }
 
-    /** Marks this task as done. */
+    /**
+     * Creates a task with the given description and status.
+     *
+     * @param description Task description.
+     * @param isDone Whether task is done.
+     */
+    public Task(String description, boolean isDone) {
+        this.description = description;
+        this.isDone = isDone;
+    }
+
+    /**
+     * Returns the task description.
+     *
+     * @return Description string.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Marks this task as done.
+     */
     public void markDone() {
         isDone = true;
     }
 
-    /** Marks this task as not done. */
+    /**
+     * Marks this task as not done.
+     */
     public void markNotDone() {
         isDone = false;
     }
 
     /**
-     * Returns the status icon used in task display.
+     * Returns the status icon used in UI.
      *
-     * @return "X" if done, otherwise a blank space.
+     * @return "X" if done, else " ".
      */
-    public String getStatusIcon() {
+    protected String statusIcon() {
         return isDone ? "X" : " ";
     }
 
     /**
-     * Returns a user-friendly string representation of the task.
-     * Subclasses can prefix this using {@code super.toString()}.
+     * Converts this task into a line suitable for saving to disk.
      *
-     * @return Display form of the task.
+     * @return Serialized task line.
+     */
+    public abstract String serialize();
+
+    /**
+     * Default string representation for a basic task.
+     *
+     * @return Display string.
      */
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + statusIcon() + "] " + description;
     }
-
-    /**
-     * Produces the save-file representation of this task.
-     *
-     * @return A single-line string used for saving/loading.
-     */
-    public abstract String serialize();
 }
