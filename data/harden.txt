@@ -1,6 +1,1 @@
-T | 0 | read book
-T | 0 | read book
-T | 0 | read book
 T | 0 | return book
-D | 0 | pay bills | 2026-02-01 | 1800
-E | 1 | project meeting | 2026-02-03 | 1400 | 2026-02-03 | 1600
