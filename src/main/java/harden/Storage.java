@@ -12,6 +12,8 @@ import java.nio.file.Paths;
  */
 public class Storage {
 
+    private static final int MAX_TASKS = 100;
+
     /** Path to the save file. */
     private final Path filePath;
 
@@ -33,16 +35,20 @@ public class Storage {
      * @throws HardenException If an I/O error occurs while saving tasks
      */
     public void save(Task[] tasks, int taskCount) throws HardenException {
-        try {
-            Path parent = filePath.getParent();
-            if (parent != null) {
-                Files.createDirectories(parent);
-            }
+        if (tasks == null) {
+            throw new HardenException("Failed to save: tasks cannot be null.");
+        }
+        if (taskCount < 0 || taskCount > tasks.length) {
+            throw new HardenException("Failed to save: invalid task count.");
+        }
 
-            try (BufferedWriter bw = Files.newBufferedWriter(filePath)) {
+        try {
+            createParentDirectoriesIfNeeded();
+
+            try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
                 for (int i = 0; i < taskCount; i++) {
-                    bw.write(tasks[i].serialize());
-                    bw.newLine();
+                    writer.write(tasks[i].serialize());
+                    writer.newLine();
                 }
             }
         } catch (IOException e) {
@@ -52,32 +58,41 @@ public class Storage {
 
     /**
      * Loads tasks from the save file into an array.
-     * <p>
      * If the save file does not exist, an empty task array is returned.
      *
-     * @return Array of tasks loaded from disk
+     * @return Array of tasks loaded from disk (capacity {@value #MAX_TASKS})
      * @throws HardenException If an I/O error occurs while loading tasks
      */
     public Task[] load() throws HardenException {
-        Task[] tasks = new Task[100];
+        Task[] tasks = new Task[MAX_TASKS];
 
         if (!Files.exists(filePath)) {
             return tasks;
         }
 
-        try (BufferedReader br = Files.newBufferedReader(filePath)) {
+        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
             String line;
             int idx = 0;
 
-            while ((line = br.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
+                }
+                if (idx >= tasks.length) {
+                    throw new HardenException("Save file has more than " + MAX_TASKS + " tasks.");
                 }
                 tasks[idx++] = Parser.deserialize(line);
             }
             return tasks;
         } catch (IOException e) {
             throw new HardenException("Failed to load: " + e.getMessage());
+        }
+    }
+
+    private void createParentDirectoriesIfNeeded() throws IOException {
+        Path parent = filePath.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
         }
     }
 }

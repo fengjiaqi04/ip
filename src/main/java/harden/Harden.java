@@ -1,6 +1,7 @@
 package harden;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -9,33 +10,43 @@ import java.util.Scanner;
  */
 public class Harden {
 
+    private static final String DEFAULT_SAVE_PATH = "data/harden.txt";
+
     private final Storage storage;
-    private TaskList tasks;
     private final Ui ui;
+    private TaskList tasks;
 
     /**
      * Constructs the Harden chatbot.
      * Initializes UI, storage, and loads tasks from disk if available.
      */
     public Harden() {
-        ui = new Ui();
-        storage = new Storage("data/harden.txt");
+        this.ui = new Ui();
+        this.storage = new Storage(DEFAULT_SAVE_PATH);
+        this.tasks = loadTasksSafely();
+    }
 
+    private TaskList loadTasksSafely() {
         try {
             Task[] loaded = storage.load();
-            ArrayList<Task> list = new ArrayList<>();
-            if (loaded != null) {
-                for (Task t : loaded) {
-                    if (t != null) {
-                        list.add(t);
-                    }
-                }
-            }
-            tasks = new TaskList(list);
+            return new TaskList(toNonNullList(loaded));
         } catch (HardenException e) {
             ui.showError(e.getMessage());
-            tasks = new TaskList();
+            return new TaskList();
         }
+    }
+
+    private List<Task> toNonNullList(Task[] tasksArray) {
+        List<Task> list = new ArrayList<>();
+        if (tasksArray == null) {
+            return list;
+        }
+        for (Task task : tasksArray) {
+            if (task != null) {
+                list.add(task);
+            }
+        }
+        return list;
     }
 
     /**
@@ -47,23 +58,29 @@ public class Harden {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            try {
-                if (!scanner.hasNextLine()) {
-                    ui.showGoodbye();
-                    break;
-                }
-
-                String input = scanner.nextLine();
-                Command command = Parser.parse(input);
-                command.execute(tasks, ui, storage);
-
-                if (command.isExit()) {
-                    ui.showGoodbye();
-                    break;
-                }
-            } catch (HardenException e) {
-                ui.showError(e.getMessage());
+            if (!scanner.hasNextLine()) {
+                ui.showGoodbye();
+                break;
             }
+
+            String input = scanner.nextLine();
+            boolean shouldExit = handleInput(input);
+
+            if (shouldExit) {
+                ui.showGoodbye();
+                break;
+            }
+        }
+    }
+
+    private boolean handleInput(String input) {
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            return command.isExit();
+        } catch (HardenException e) {
+            ui.showError(e.getMessage());
+            return false;
         }
     }
 
