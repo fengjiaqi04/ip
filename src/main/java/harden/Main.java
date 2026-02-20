@@ -1,8 +1,10 @@
 package harden;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * The main JavaFX application class.
@@ -10,7 +12,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         Storage storage = new Storage("data/harden.txt");
         TaskList tasks = new TaskList();
 
@@ -26,9 +28,14 @@ public class Main extends Application {
         }
 
         HardenGui hardenGui = new HardenGui(storage, tasks);
-        MainWindow root = new MainWindow(hardenGui);
 
-        Scene scene = new Scene(root, 500, 500);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+        AnchorPane root = fxmlLoader.load();
+
+        MainWindow controller = fxmlLoader.getController();
+        controller.setHardenGui(hardenGui);
+
+        Scene scene = new Scene(root);
         stage.setTitle("Harden");
         stage.setScene(scene);
         stage.show();

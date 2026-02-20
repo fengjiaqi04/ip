@@ -1,101 +1,78 @@
 package harden;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 /**
- * Main GUI window for Harden.
- * Keeps UI wiring (input -> response) in one place.
+ * Controller for MainWindow.fxml.
  */
-public class MainWindow extends BorderPane {
+public class MainWindow {
 
-    private static final int SPACING = 8;
-    private static final int PADDING = 10;
+    @FXML
+    private ScrollPane scrollPane;
 
-    private static final String PROMPT_TEXT = "Type a command...";
-    private static final String SEND_BUTTON_TEXT = "Send";
+    @FXML
+    private VBox dialogContainer;
 
-    private static final String USER_PREFIX = "You: ";
-    private static final String BOT_PREFIX = "Harden: ";
+    @FXML
+    private TextField userInput;
 
-    private final VBox dialogContainer;
-    private final TextField userInput;
-    private final HardenGui hardenGui;
+    @FXML
+    private Button sendButton;
 
-    public MainWindow(HardenGui hardenGui) {
+    private HardenGui hardenGui;
+
+    private Image userImage;
+    private Image hardenImage;
+
+    @FXML
+    public void initialize() {
+        // Auto-scroll to bottom when new dialogs are added
+        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+
+        // Load images from resources
+        userImage = new Image(getClass().getResourceAsStream("/images/User.png"));
+        hardenImage = new Image(getClass().getResourceAsStream("/images/Harden.png"));
+    }
+
+    /**
+     * Injects the Harden logic object, then shows greeting.
+     */
+    public void setHardenGui(HardenGui hardenGui) {
         this.hardenGui = hardenGui;
 
-        this.dialogContainer = createDialogContainer();
-        ScrollPane scrollPane = createScrollPane(dialogContainer);
-
-        this.userInput = new TextField();
-        this.userInput.setPromptText(PROMPT_TEXT);
-
-        Button sendButton = new Button(SEND_BUTTON_TEXT);
-        HBox inputBox = createInputBox(userInput, sendButton);
-
-        setCenter(scrollPane);
-        setBottom(inputBox);
-
-        addBotText(hardenGui.getGreeting());
-
-        sendButton.setOnAction(e -> handleInput());
-        userInput.setOnAction(e -> handleInput());
+        String greeting = hardenGui.getGreeting();
+        dialogContainer.getChildren().add(
+                DialogBox.getHardenDialog(greeting, new ImageView(hardenImage))
+        );
     }
 
-    private VBox createDialogContainer() {
-        VBox container = new VBox(SPACING);
-        container.setPadding(new Insets(PADDING));
-        return container;
-    }
-
-    private ScrollPane createScrollPane(VBox content) {
-        ScrollPane scrollPane = new ScrollPane(content);
-        scrollPane.setFitToWidth(true);
-        scrollPane.vvalueProperty().bind(content.heightProperty());
-        return scrollPane;
-    }
-
-    private HBox createInputBox(TextField input, Button sendButton) {
-        HBox inputBox = new HBox(SPACING, input, sendButton);
-        inputBox.setPadding(new Insets(PADDING));
-        return inputBox;
-    }
-
-    private void handleInput() {
+    @FXML
+    private void handleUserInput() {
         String input = userInput.getText();
         if (input == null || input.trim().isEmpty()) {
             return;
         }
 
-        addUserText(input);
+        dialogContainer.getChildren().add(
+                DialogBox.getUserDialog(input, new ImageView(userImage))
+        );
 
         String response = hardenGui.getResponse(input);
-        addBotText(response);
+        dialogContainer.getChildren().add(
+                DialogBox.getHardenDialog(response, new ImageView(hardenImage))
+        );
 
         userInput.clear();
 
         if (hardenGui.isExitCommand(input)) {
             Platform.exit();
         }
-    }
-
-    private void addUserText(String msg) {
-        addText(USER_PREFIX + msg);
-    }
-
-    private void addBotText(String msg) {
-        addText(BOT_PREFIX + msg);
-    }
-
-    private void addText(String text) {
-        dialogContainer.getChildren().add(new Text(text));
     }
 }
