@@ -101,6 +101,8 @@ public class Parser {
             int index0 = parseOneBasedIndex(rest, "unmark");
             return new UnmarkCommand(index0);
         }
+        case "help":
+            return new HelpCommand();
 
         default:
             throw new HardenException("OOPS!! I'm sorry, but I don't know what that means.");
