@@ -3,9 +3,8 @@ package harden;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.stage.Stage;
 /**
  * The main JavaFX application class.
  */

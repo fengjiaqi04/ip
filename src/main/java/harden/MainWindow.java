@@ -30,7 +30,10 @@ public class MainWindow {
 
     private Image userImage;
     private Image hardenImage;
-
+    /**
+     * Initializes the main window after the FXML fields are injected.
+     * Sets up auto-scrolling and loads the user/bot avatar images.
+     */
     @FXML
     public void initialize() {
         // Auto-scroll to bottom when new dialogs are added
@@ -42,7 +45,9 @@ public class MainWindow {
     }
 
     /**
-     * Injects the Harden logic object, then shows greeting.
+     * Injects the HardenGui instance and shows the startup greeting.
+     *
+     * @param hardenGui The GUI adapter for Harden.
      */
     public void setHardenGui(HardenGui hardenGui) {
         this.hardenGui = hardenGui;

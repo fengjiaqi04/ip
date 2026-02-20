@@ -1,2 +1,1 @@
-T | 1 | eat lunch
-T | 0 | return book
+D | 0 | assigment1 | 2026-02-20 | 2359

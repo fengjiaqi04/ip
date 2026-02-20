@@ -1,13 +1,13 @@
 package harden;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-
-import java.io.IOException;
 
 /**
  * A dialog box consisting of an ImageView to represent the speaker and a Label
