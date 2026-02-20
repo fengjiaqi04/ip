@@ -10,7 +10,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * Main GUI window for Harden.
+ * Keeps UI wiring (input -> response) in one place.
+ */
 public class MainWindow extends BorderPane {
+
+    private static final int SPACING = 8;
+    private static final int PADDING = 10;
+
+    private static final String PROMPT_TEXT = "Type a command...";
+    private static final String SEND_BUTTON_TEXT = "Send";
+
+    private static final String USER_PREFIX = "You: ";
+    private static final String BOT_PREFIX = "Harden: ";
 
     private final VBox dialogContainer;
     private final TextField userInput;
@@ -19,20 +32,14 @@ public class MainWindow extends BorderPane {
     public MainWindow(HardenGui hardenGui) {
         this.hardenGui = hardenGui;
 
-        dialogContainer = new VBox(8);
-        dialogContainer.setPadding(new Insets(10));
+        this.dialogContainer = createDialogContainer();
+        ScrollPane scrollPane = createScrollPane(dialogContainer);
 
-        ScrollPane scrollPane = new ScrollPane(dialogContainer);
-        scrollPane.setFitToWidth(true);
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        this.userInput = new TextField();
+        this.userInput.setPromptText(PROMPT_TEXT);
 
-        userInput = new TextField();
-        userInput.setPromptText("Type a command...");
-
-        Button sendButton = new Button("Send");
-
-        HBox inputBox = new HBox(8, userInput, sendButton);
-        inputBox.setPadding(new Insets(10));
+        Button sendButton = new Button(SEND_BUTTON_TEXT);
+        HBox inputBox = createInputBox(userInput, sendButton);
 
         setCenter(scrollPane);
         setBottom(inputBox);
@@ -41,6 +48,25 @@ public class MainWindow extends BorderPane {
 
         sendButton.setOnAction(e -> handleInput());
         userInput.setOnAction(e -> handleInput());
+    }
+
+    private VBox createDialogContainer() {
+        VBox container = new VBox(SPACING);
+        container.setPadding(new Insets(PADDING));
+        return container;
+    }
+
+    private ScrollPane createScrollPane(VBox content) {
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.vvalueProperty().bind(content.heightProperty());
+        return scrollPane;
+    }
+
+    private HBox createInputBox(TextField input, Button sendButton) {
+        HBox inputBox = new HBox(SPACING, input, sendButton);
+        inputBox.setPadding(new Insets(PADDING));
+        return inputBox;
     }
 
     private void handleInput() {
@@ -62,10 +88,14 @@ public class MainWindow extends BorderPane {
     }
 
     private void addUserText(String msg) {
-        dialogContainer.getChildren().add(new Text("You: " + msg));
+        addText(USER_PREFIX + msg);
     }
 
     private void addBotText(String msg) {
-        dialogContainer.getChildren().add(new Text("Harden: " + msg));
+        addText(BOT_PREFIX + msg);
+    }
+
+    private void addText(String text) {
+        dialogContainer.getChildren().add(new Text(text));
     }
 }
