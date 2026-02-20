@@ -17,8 +17,6 @@ public class Parser {
      * @throws HardenException If the command format is invalid or unknown.
      */
     public static Command parse(String input) throws HardenException {
-        assert input != null : "Parser.parse: input should not be null (caller bug)";
-
         if (input == null) {
             throw new HardenException("Please enter a command.");
         }
@@ -39,9 +37,6 @@ public class Parser {
             keyword = trimmed.substring(0, firstSpace).trim();
             rest = trimmed.substring(firstSpace + 1).trim();
         }
-
-        assert keyword != null && !keyword.isBlank()
-                : "Parser.parse: keyword should not be blank after parsing";
 
         switch (keyword) {
         case "bye":
@@ -101,8 +96,11 @@ public class Parser {
             int index0 = parseOneBasedIndex(rest, "unmark");
             return new UnmarkCommand(index0);
         }
-        case "help":
-            return new HelpCommand();
+
+        case "delete": {
+            int index0 = parseOneBasedIndex(rest, "delete");
+            return new DeleteCommand(index0);
+        }
 
         default:
             throw new HardenException("OOPS!! I'm sorry, but I don't know what that means.");
@@ -156,7 +154,6 @@ public class Parser {
             LocalDate date = parseDate(parts[3].trim(), line);
             LocalTime time = parseTime(parts[4].trim(), line);
 
-            // If your Deadline constructor supports (desc, date, time)
             Deadline d = new Deadline(desc, date, time);
             if (isDone) {
                 d.markDone();
@@ -173,7 +170,6 @@ public class Parser {
             LocalDate toDate = parseDate(parts[5].trim(), line);
             LocalTime toTime = parseTime(parts[6].trim(), line);
 
-            // If your Event constructor supports (desc, fromDate, fromTime, toDate, toTime)
             Event e = new Event(desc, fromDate, fromTime, toDate, toTime);
             if (isDone) {
                 e.markDone();
@@ -192,8 +188,6 @@ public class Parser {
      * Parses a 1-based index string and returns 0-based index.
      */
     private static int parseOneBasedIndex(String rest, String cmd) throws HardenException {
-        assert cmd != null && !cmd.isBlank() : "parseOneBasedIndex: cmd should be non-blank";
-
         if (rest == null || rest.trim().isEmpty()) {
             throw new HardenException("Usage: " + cmd + " <task number>");
         }

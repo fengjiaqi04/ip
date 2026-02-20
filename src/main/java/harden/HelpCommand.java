@@ -9,6 +9,7 @@ public class HelpCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         ui.showMessage("Commands:");
         ui.showMessage("list");
+        ui.showMessage("delete <task number>");
         ui.showMessage("todo <description>");
         ui.showMessage("deadline <description> /by <date time>");
         ui.showMessage("event <description> /from <start> /to <end>");

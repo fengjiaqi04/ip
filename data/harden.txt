@@ -1,4 +1,3 @@
 T | 0 | return book
 T | 1 | eat lunch
-T | 1 | french class
 T | 0 | return book
