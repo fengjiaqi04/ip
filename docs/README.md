@@ -12,11 +12,11 @@ It supports todos, deadlines, and events, and saves tasks automatically.
 
 ### Run (JavaFX GUI)
 **Windows (PowerShell):**
-```sh
+```
 .\gradlew run
 ```
 **Macs/Linux**
-```sh
+```
 ./gradlew run
 ```
 ## Features (User Guide)
@@ -44,9 +44,9 @@ You can type commands into the GUI input box and press **Send**.
 >Harden supports **date only** or **date + time**.
 
 **Format**
->deadline < description > /by <yyyy-MM-dd>
+>deadline < description > /by < yyyy-MM-dd >
 >
->deadline < description > /by <yyyy-MM-dd HHmm>
+>deadline < description > /by < yyyy-MM-dd HHmm >
 
 **Examples**
 >deadline return book /by 2026-03-01
@@ -61,7 +61,7 @@ If you provide **date only**, Harden uses **23:59** as the default time.
 ### Add an event
 **Format**
 
->event < description > /from <yyyy-MM-dd HHmm> /to <yyyy-MM-dd HHmm>
+>event < description > /from < yyyy-MM-dd HHmm > /to < yyyy-MM-dd HHmm >
 
 **Example**
 
@@ -92,11 +92,11 @@ Shows all tasks currently stored.
 ### Unmark a task (mark as not done)
 **Format**
 
-: unmark <task number>
+>unmark < task number >
 
 **Example**
 
-: unmark 2
+>unmark 2
 
 
 ---
