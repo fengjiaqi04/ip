@@ -1,23 +1,19 @@
 # Harden
 
-Harden is a Duke-style task manager chatbot with a JavaFX GUI.
+Harden is a task manager chatbot.
 It supports todos, deadlines, and events, and saves tasks automatically.
 
 ---
-
+## What it looks like
+You can find it [here](Ui.png)
 ## Quick start
 
 ### Requirements
 - Java 17 (recommended)
 
-### Run (JavaFX GUI)
-**Windows (PowerShell):**
+### Run
 ```
-.\gradlew run
-```
-**Macs/Linux**
-```
-./gradlew run
+java -jar harden.jar
 ```
 ## Features (User Guide)
 
@@ -41,7 +37,7 @@ You can type commands into the GUI input box and press **Send**.
 ---
 
 ### Add a deadline
->Harden supports **date only** or **date + time**.
+Harden supports **date only** or **date + time**.
 
 **Format**
 >deadline < description > /by < yyyy-MM-dd >
