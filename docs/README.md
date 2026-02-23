@@ -15,25 +15,33 @@ You can find it [here](Ui.png)
 ```
 java -jar harden.jar
 ```
+---
 ## Features (User Guide)
 
 You can type commands into the GUI input box and press **Send**.
 
 ---
+
 ### View all commands
 
 You can check all the existing commands
->help
+```text
+help
+```
+
 ---
 
 ### Add a todo
 
 **Format**
->todo `<description>`
+```text
+todo <description>
+```
 
 **Example**
->todo read book
-
+```text
+todo read book
+```
 
 ---
 
@@ -41,15 +49,17 @@ You can check all the existing commands
 Harden supports **date only** or **date + time** in deadline.
 
 **Format**
->deadline `<description>` /by `<yyyy-MM-dd>`
->
->deadline `<description>` /by `<yyyy-MM-dd HHmm>`
+```text
+deadline <description> /by <yyyy-MM-dd>
 
+deadline <description> /by <yyyy-MM-dd HHmm>
+```
 **Examples**
->deadline return book /by 2026-03-01
-> 
->deadline return book /by 2026-03-01 1800
-
+```text
+deadline return book /by 2026-03-01
+ 
+deadline return book /by 2026-03-01 1800
+```
 
 If you provide **date only**, Harden uses **23:59** as the default time.
 
@@ -57,44 +67,44 @@ If you provide **date only**, Harden uses **23:59** as the default time.
 
 ### Add an event
 **Format**
-
->event `<description>` /from `<yyyy-MM-dd HHmm>` /to `<yyyy-MM-dd HHmm>`
-
+```text
+event <description> /from <yyyy-MM-dd HHmm> /to <yyyy-MM-dd HHmm>
+```
 **Example**
-
->event project meeting /from 2026-03-01 1400 /to 2026-03-01 1600
-
+```text
+event project meeting /from 2026-03-01 1400 /to 2026-03-01 1600
+```
 ---
 
 ### List tasks
 Shows all tasks currently stored.
 
-
->list
-
+```text
+list
+```
 ---
 
 ### Mark a task as done
 **Format**
-
->mark `<task number>`
-
+```text
+mark <task number>
+```
 **Example**
-
->mark 2
-
+```text
+mark 2
+```
 
 ---
 
 ### Unmark a task (mark as not done)
 **Format**
-
->unmark `<task number>`
-
+```text
+unmark <task number>
+```
 **Example**
-
->unmark 2
-
+```text
+unmark 2
+```
 
 ---
 
@@ -102,28 +112,30 @@ Shows all tasks currently stored.
 Removes the task at the given index.
 
 **Format**
-
->delete `<task number>`
-
+```text
+delete <task number>
+```
 **Example**
-
->delete 3
-
+```text
+delete 3
+```
 ---
 
 ### Find tasks by keyword
 Finds tasks whose description contains the keyword.
 
 **Format**
->find `<keyword>`
-
+```text
+find <keyword>
+```
 
 **Example**
->find book
-
+```text
+find book
+```
 ---
 
 ### Exit the app
-
-
->bye
+```text
+bye
+```
