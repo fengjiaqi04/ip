@@ -21,8 +21,9 @@ You can type commands into the GUI input box and press **Send**.
 
 ---
 ### View all commands
->help
 
+You can check all the existing commands
+>help
 ---
 
 ### Add a todo
@@ -37,7 +38,7 @@ You can type commands into the GUI input box and press **Send**.
 ---
 
 ### Add a deadline
-Harden supports **date only** or **date + time**.
+Harden supports **date only** or **date + time** in deadline.
 
 **Format**
 >deadline `<description>` /by `<yyyy-MM-dd>`

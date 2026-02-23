@@ -102,6 +102,9 @@ public class Parser {
             return new DeleteCommand(index0);
         }
 
+        case "help":
+            return new HelpCommand();
+
         default:
             throw new HardenException("OOPS!! I'm sorry, but I don't know what that means.");
         }
