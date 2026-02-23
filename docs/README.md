@@ -28,7 +28,7 @@ You can type commands into the GUI input box and press **Send**.
 ### Add a todo
 
 **Format**
->todo < description >
+>todo `<description>`
 
 **Example**
 >todo read book
@@ -40,9 +40,9 @@ You can type commands into the GUI input box and press **Send**.
 Harden supports **date only** or **date + time**.
 
 **Format**
->deadline < description > /by < yyyy-MM-dd >
+>deadline `<description>` /by `<yyyy-MM-dd>`
 >
->deadline < description > /by < yyyy-MM-dd HHmm >
+>deadline `<description>` /by `<yyyy-MM-dd HHmm>`
 
 **Examples**
 >deadline return book /by 2026-03-01
@@ -57,7 +57,7 @@ If you provide **date only**, Harden uses **23:59** as the default time.
 ### Add an event
 **Format**
 
->event < description > /from < yyyy-MM-dd HHmm > /to < yyyy-MM-dd HHmm >
+>event `<description>` /from `<yyyy-MM-dd HHmm>` /to `<yyyy-MM-dd HHmm>`
 
 **Example**
 
@@ -76,7 +76,7 @@ Shows all tasks currently stored.
 ### Mark a task as done
 **Format**
 
->mark < task number >
+>mark `<task number>`
 
 **Example**
 
@@ -88,7 +88,7 @@ Shows all tasks currently stored.
 ### Unmark a task (mark as not done)
 **Format**
 
->unmark < task number >
+>unmark `<task number>`
 
 **Example**
 
@@ -102,7 +102,7 @@ Removes the task at the given index.
 
 **Format**
 
->delete < task number >
+>delete `<task number>`
 
 **Example**
 
@@ -114,7 +114,7 @@ Removes the task at the given index.
 Finds tasks whose description contains the keyword.
 
 **Format**
->find < keyword >
+>find `<keyword>`
 
 
 **Example**
